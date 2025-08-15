@@ -1,7 +1,3 @@
-Here’s an improved and professional version of your `README.md` file, designed for clarity, ease of use, and presentation. This version adds better markdown structure, clearer instructions, and a more polished tone suitable for public repositories or collaborative projects.
-
----
-
 # 🛒 Django React Store
 
 A full-stack e-commerce web application built with **Django** (backend) and **React** (frontend). The platform supports product management, JWT-based user authentication, secure Razorpay payments, and media uploads for product images.
@@ -75,34 +71,6 @@ A full-stack e-commerce web application built with **Django** (backend) and **Re
 5. **Visit the Admin Panel**
 
    * [http://localhost:8000/admin/](http://localhost:8000/admin/)
-
----
-
-### ⚛️ Frontend (React)
-
-> 💡 Ensure your React frontend is located in a separate folder (`store/` assumed here)
-
-1. **Navigate to frontend directory**
-
-   ```bash
-   cd store/
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server**
-
-   ```bash
-   npm start
-   ```
-
-4. **Visit the frontend**
-
-   * [http://localhost:5173/](http://localhost:5173/)
 
 ---
 
