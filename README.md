@@ -74,15 +74,15 @@ npm install
 npm run dev
 ```
 
-### Configuration
+### 🔐 Configuration
 
 - Update environment variables in `.env` files for both backend and frontend as needed (e.g., API URLs, payment keys).
 - For Razorpay integration, add your API keys in the backend settings.
-DEBUG=True
-SECRET_KEY=your-secret-key
-ALLOWED_HOSTS=localhost,127.0.0.1
-RAZORPAY_API_KEY=your_razorpay_key
-RAZORPAY_API_SECRET=your_razorpay_secret
+- DEBUG=True
+- SECRET_KEY=your-secret-key
+- ALLOWED_HOSTS=localhost,127.0.0.1
+- RAZORPAY_API_KEY=your_razorpay_key
+- RAZORPAY_API_SECRET=your_razorpay_secret
 
 ---
 
@@ -96,7 +96,7 @@ RAZORPAY_API_SECRET=your_razorpay_secret
 | Install JS packages     | `npm install <package>`        |
 | Django Admin Panel      | `http://localhost:8000/admin`  |
 
-## Folder Structure
+## 📁 Folder Structure
 
 ```
 django-react-store/
@@ -126,10 +126,10 @@ Let me know if you’d like to generate badges (like GitHub stars, license, or l
 
 ---
 
-## License
+## 📝 License
 
 This project is licensed under the MIT License.
 
-## Contact
+## 📬 Contact
 
 For questions or feedback, please open an issue [chandhupepakayala@gmail.com](mailto:chandhupepakayala@gmail.com)

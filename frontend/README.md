@@ -1,34 +1,37 @@
 # 🛒 MyShop E-Commerce Frontend
 
-A modern, responsive e-commerce frontend built with **React** and **Vite**. This project features product browsing, cart management, order history, authentication, and seamless payment integration.
+[![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-Frontend%20Bundler-ff69b4?logo=vite)](https://vitejs.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+A modern, responsive e-commerce frontend built with **React** and **Vite**, featuring product browsing, cart management, order tracking, authentication, and Razorpay payment integration.
 
 ---
 
 ## 🚀 Features
 
-- **Product Listing:** Browse products with image carousels and details.
-- **Categories:** Filter products by categories.
-- **Product Details:** View detailed information and images for each product.
-- **Cart:** Add, remove, and view items in your cart.
-- **Orders:** Track your order history.
-- **Authentication:** Secure login with JWT tokens.
-- **Payment Integration:** Pay securely via Razorpay.
-- **Responsive Design:** Built with Bootstrap for mobile and desktop.
+✅ Product Listing with image carousels  
+✅ Product Categories & Filters  
+✅ Product Detail View with gallery  
+✅ Cart: Add, Remove, View  
+✅ Order History Tracking  
+✅ JWT-based Authentication  
+✅ Razorpay Payment Integration  
+✅ Responsive Design with Bootstrap
 
 ---
 
-## 🏗️ Project Structure
+## 📁 Project Structure
 
-```
+```bash
+
 frontend/
-│
 ├── public/                # Static assets
-│   └── vite.svg
 ├── src/
 │   ├── api/               # API utilities (Axios setup)
 │   ├── assets/            # Images and icons
 │   ├── components/        # Reusable UI components
-│   ├── pages/             # Application pages (Home, Cart, Orders, etc.)
+│   ├── pages/             # App pages (Home, Cart, Orders, etc.)
 │   ├── styles/            # CSS styles
 │   ├── App.jsx            # Main app component
 │   └── main.jsx           # Entry point
@@ -36,100 +39,126 @@ frontend/
 ├── package.json           # Project metadata & scripts
 ├── vite.config.js         # Vite configuration
 └── README.md              # Project documentation
-```
+
+````
 
 ---
 
 ## 🛠️ Getting Started
 
-### Prerequisites
+### 📋 Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [Node.js](https://nodejs.org/) (v18+)
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
-### Installation
+### 🚚 Installation
 
-1. **Clone the repository:**
-   ```sh
-   git clone https://github.com/your-username/myshop-frontend.git
-   cd myshop-frontend
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/your-username/myshop-frontend.git
+cd myshop-frontend
 
-2. **Install dependencies:**
-   ```sh
-   npm install
-   # or
-   yarn install
-   ```
+# Install dependencies
+npm install
+# or
+yarn install
+````
 
-3. **Start the development server:**
-   ```sh
-   npm run dev
-   # or
-   yarn dev
-   ```
+### 🚀 Run the App
 
-4. **Open in browser:**
-   Visit [http://localhost:5173](http://localhost:5173)
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+> 🧭 Visit: [http://localhost:5173](http://localhost:5173)
 
 ---
 
 ## ⚙️ Configuration
 
-- **API Base URL:**  
-  The frontend expects a Django backend running at `http://127.0.0.1:8000/`.  
-  Update [`src/api/axios.js`](src/api/axios.js) if your backend URL differs.
+### 🔗 API Base URL
 
-- **Payment Integration:**  
-  Razorpay checkout is loaded via CDN in [`index.html`](index.html).
+By default, the frontend connects to the backend at:
 
----
+```
+http://127.0.0.1:8000/
+```
 
-## 📦 Scripts
+To change it, update the `baseURL` in:
+[`src/api/axios.js`](src/api/axios.js)
 
-- `npm run dev` — Start development server
-- `npm run build` — Build for production
-- `npm run preview` — Preview production build
-- `npm run lint` — Run ESLint
+### 💳 Razorpay Integration
 
----
-
-## 🧩 Technologies Used
-
-- **React** (v19)
-- **Vite**
-- **Bootstrap** & **React-Bootstrap**
-- **Axios**
-- **React Router**
-- **Razorpay** (payment gateway)
-- **ESLint** (code quality)
+Razorpay checkout script is loaded via CDN in:
+[`index.html`](index.html)
 
 ---
 
-## 📝 Customization
+## 📦 NPM Scripts
 
-- **Add new pages:** Place in [`src/pages/`](src/pages/)
-- **Add new components:** Place in [`src/components/`](src/components/)
-- **Update styles:** Edit files in [`src/styles/`](src/styles/)
-- **API calls:** Use [`src/api/axios.js`](src/api/axios.js) for authenticated requests
+| Command           | Description              |
+| ----------------- | ------------------------ |
+| `npm run dev`     | Start development server |
+| `npm run build`   | Build for production     |
+| `npm run preview` | Preview production build |
+| `npm run lint`    | Run ESLint               |
 
 ---
 
-## 🙋‍♂️ Contributing
+## 🧩 Tech Stack
 
-Pull requests and suggestions are welcome!  
-Please open issues for bugs or feature requests.
+* ⚛️ **React** (v19)
+* ⚡ **Vite**
+* 🎨 **Bootstrap** + **React-Bootstrap**
+* 🌐 **Axios**
+* 🔀 **React Router**
+* 💳 **Razorpay** Payment Gateway
+* 🧹 **ESLint**
+
+---
+
+## 🛠️ Customization Guide
+
+* **Add Pages:** Create new files in [`src/pages/`](src/pages/)
+* **Add Components:** Use [`src/components/`](src/components/)
+* **Style Updates:** Edit styles in [`src/styles/`](src/styles/)
+* **API Requests:** Centralized in [`src/api/axios.js`](src/api/axios.js)
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! 🎉
+Feel free to fork the project, open pull requests, or file issues for bugs/features.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 💡 Credits
+## 🙌 Credits
 
-- [React](https://react.dev/)
-- [Vite](https://vitejs.dev/)
-- [Bootstrap](https://getbootstrap.com/)
+* [React](https://react.dev/)
+* [Vite](https://vitejs.dev/)
+* [Bootstrap](https://getbootstrap.com/)
+* [Razorpay](https://razorpay.com/)
+
+---
+
+### ✅ Key Improvements:
+- **Badges** for quick visual reference.
+- **Bullet points & tables** to improve scannability.
+- **Clear sections** with consistent heading levels.
+- **Code blocks** where necessary for better clarity.
+- **Inline links** and file paths to guide contributors.
+
+---
+
+## 📬 Contact
+
+For questions or feedback, please open an issue [chandhupepakayala@gmail.com](mailto:chandhupepakayala@gmail.com)
