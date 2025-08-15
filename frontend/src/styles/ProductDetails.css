@@ -1,0 +1,10 @@
+.product-images {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+}
+
+.product-images img{
+    height: 300px;
+    width: 250px;
+}

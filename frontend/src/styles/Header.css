@@ -1,0 +1,54 @@
+/* Header.css */
+
+.search-form {
+  max-width: 250px;
+}
+
+.search-input {
+  border-right: none;
+  border-radius: 20px 0 0 20px;
+  padding-right: 0;
+  height: 38px;
+}
+
+.search-icon {
+  background-color: white;
+  border-left: none;
+  border-radius: 0 20px 20px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+}
+
+.search-icon svg {
+  color: red;
+}
+
+.header-icon {
+  color: red;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.header-icon:hover {
+  transform: scale(1.1);
+}
+
+.profile-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%; /* places it below the icon */
+  right: 0;
+  z-index: 1000;
+}
+
+.profile-menu:hover .profile-dropdown {
+  display: block;
+}

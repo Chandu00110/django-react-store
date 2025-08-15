@@ -1,0 +1,11 @@
+.order-container{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.orders-card{
+    margin: 20px 0;
+    width: 50rem;
+}
