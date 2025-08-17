@@ -3,6 +3,7 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from ..models import *
 from django.contrib.auth.models import User
+from ..utils import send_verification_email
 
 class RegisterSerializer(serializers.ModelSerializer):
 
@@ -28,7 +29,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         validated_data['username'] = validated_data['email']
         validated_data.pop('password2')
 
-        user = User.objects.create_user(**validated_data)
+        user = User.objects.create_user(is_active=False,**validated_data)
+
+        send_verification_email(request=self.context.get('request'), user=user)
         return user
     
     class Meta:

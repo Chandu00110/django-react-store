@@ -1,14 +1,16 @@
 import React,{ useEffect,useState } from 'react';
 import api from '../api/axios';
-import {Container,Row,Col,Card,Badge,Button,Carousel} from 'react-bootstrap';
+import {Container,Row,Col,Card,Badge,Button,Carousel,Nav} from 'react-bootstrap';
 import { RxCross2 } from "react-icons/rx";
 import { PiKeyReturnLight } from "react-icons/pi";
+import Address from './Address';
 import '../styles/Cart.css';
 
 const Cart = () => {
 
     const [cartItems,setCartItems] = useState([]);
     const [loading,setLoading] = useState(true);
+    const [show,setShow] = useState("address");
 
     const fetchCart = async () => {
         try{
@@ -47,50 +49,6 @@ const Cart = () => {
 
     const discount = totalPrice - 1;
 
-    const createPayment = async () => {
-        try{
-            const { data } = await api.post("create-payment/",{
-                amount : (totalPrice - discount)
-            });
-
-            console.log("Data === ",data.currecy);
-
-            const options = {
-                key : data.key,
-                amount : data.amount,
-                currency : data.currecy,
-                name : "My E-commerce",
-                description : "Order Payment",
-                order_id : data.order_id,
-                handler : function(response){
-                    alert(`Payment Successfull! Payment ID : ${response.razorpay_payment_id}`);
-                    storePayment(response,data.amount)
-                },
-                theme : { color : "#3399cc" }
-            };
-
-            const razorpay = new window.Razorpay(options);
-            razorpay.open();
-        }
-        catch(error){
-            console.error(error);
-        }
-    };
-
-    const storePayment = async (response,amount) => {
-        const res = await api.post("store-payment/",
-            {
-                payment_id : response.razorpay_payment_id,
-                order_id : response.razorpay_order_id,
-                signature : response.razorpay_signature,
-                amount : amount
-            }
-        );
-        if(res.status === 200){
-            console.log("ok")
-        }
-    };
-
     useEffect(() => {
         fetchCart();
     },[]);
@@ -99,14 +57,25 @@ const Cart = () => {
 
   return (
         <div>
-            <h2>Your Cart</h2>
+            <Nav variant="underline" className="justify-content-center mt-4" activeKey="/home">
+                <Nav.Item>
+                    <Nav.Link>Bag</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link>Address</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link>Payment</Nav.Link>
+                </Nav.Item>
+            </Nav>
             {cartItems.length === 0 ? (
                 <p>Your cart is empty.</p>
             ) : (
                 <>
-                    <Container>
-                        <Row>
-                            <Col>
+                   {show === "Bag" && (
+                     <Container>
+                        <Row style={{margin: '0px 150px'}} className='g-4'>
+                            <Col className='mt-2'>
                                 {cartItems.map(item => (
                                     <Card className='cart-card' key={item.id}>
                                        <div className="item-images">
@@ -128,21 +97,35 @@ const Cart = () => {
                                     </Card>
                                 ))}
                             </Col>
-                            <Col>
+                            <Col className='mt-2'>
                                 <Card className='cart_total'>
-                                    <Card.Body>
-                                        <Card.Title>PRICE DETAILS</Card.Title>
-                                        <Card.Text>Total MRP - ₹{totalPrice.toFixed(2)}</Card.Text>
-                                        <Card.Text>Discount on MRP - ₹{discount.toFixed(2)}</Card.Text>
+                                    <Card.Body className='d-grid gap-2'>
+                                        <Card.Title className='mb-2'>PRICE DETAILS</Card.Title>
+                                        <Card.Text className='cart_total_text'> 
+                                            <span>Total MRP</span>
+                                            <span>₹{totalPrice.toFixed(2)}</span>
+                                        </Card.Text>
+                                        <Card.Text className='cart_total_text'>
+                                            <span>Discount on MRP</span>
+                                            <span>₹{discount.toFixed(2)}</span>
+                                        </Card.Text>
                                         <hr />
-                                        <Card.Text>Totla Amount - ₹{(totalPrice - discount).toFixed(2)}</Card.Text>
-                                        <Button id="rzp-button1" onClick={createPayment}>Pay Now</Button>
+                                        <Card.Text className='cart_total_text fw-bold'>
+                                             <span>Total Amount</span>
+                                            <span>₹{(totalPrice - discount).toFixed(2)}</span>
+                                        </Card.Text>
+                                        <Button href='/checkout/'>Place Order</Button>
                                     </Card.Body>
                                 </Card>
                             </Col>
                         </Row>
                 
                     </Container>
+                   )}
+
+                   {show === "address" && (
+                    <Address />
+                   )}
                 </>
             )}
         </div>

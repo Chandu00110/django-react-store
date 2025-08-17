@@ -20,4 +20,5 @@ urlpatterns = [
     path('register/',registerView.as_view(),name='register'),
     path('create-payment/',create_payment,name="create_payment"),
     path('store-payment/',storePayment,name="store_payment"),
+    path('verify-email/<uidb64>/<token>/',verifyEmailView.as_view(), name='verify_email'),
 ]

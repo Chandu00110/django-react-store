@@ -26,7 +26,7 @@ const Products = () => {
   return (
     <div>
       <h2>Products</h2>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "0px" }}>
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

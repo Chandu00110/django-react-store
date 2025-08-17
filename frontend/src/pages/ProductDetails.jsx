@@ -1,8 +1,9 @@
 import React,{useEffect,useState} from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../api/axios';
-import { Container,Row,Col,Button,Image } from 'react-bootstrap';
-import '../styles/ProductDetails.css'
+import { Container,Row,Col,Button,Image,Badge } from 'react-bootstrap';
+import { IoIosStar  } from "react-icons/io";
+import '../styles/ProductDetails.css';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -32,19 +33,21 @@ const ProductDetails = () => {
 return (
     <Container className='mt-4'>
         <Row>
-            <Col sm={6}>
+            <Col sm={8}>
             {product.product_image && (
                 <div className="product-images">
                     {product.product_image.map((image) =>(
-                        <Image src={image.image} rounded/>
+                        <Image src={image.image}/>
                     ))}
                 </div>
             )}
             </Col>
             <Col>
                 <h1>{product.name}</h1>
+                <p>{product.description}</p>
+                <hr />
+                <Button className='rating-button'>4.8 <IoIosStar  className="star-icon" /> | 5</Button>
                 <h4>₹{product.price}</h4>
-                <p>Description: <br/>{product.description}</p>
                 <Button onClick={handleAddToCart}>Add to Cart</Button>
             </Col>
         </Row>

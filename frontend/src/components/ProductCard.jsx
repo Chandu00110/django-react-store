@@ -1,24 +1,31 @@
-import { Button,Card,Carousel } from "react-bootstrap";
+import { Badge, Button,Card,Carousel } from "react-bootstrap";
 import '../styles/ProductCard.css';
+import { IoIosStar  } from "react-icons/io";
 
 const ProductCard = ({ product }) => {
+
+  const redirectToProductDetails = () => {
+    window.location.href = `/products/${product.id}`;
+  };
+
   return (
-    <Card >
+    <Card className="product-card" onClick={redirectToProductDetails}>
       {product.product_image && (
         <div className="card-img">
-            <Carousel fade>
+            <Carousel fade indicators={false} controls={false}>
                 {product.product_image.map((image) =>(
                     <Carousel.Item>
                         <Card.Img variant="top" className="" src={image.image} alt={product.name} />
                     </Carousel.Item>
                 ))}
             </Carousel>
+            <Badge className="product-badge">4.8 <IoIosStar  className="star-icon" /> | 5</Badge>
         </div>
       )}
-      <Card.Body>
+      <Card.Body className="product-card-body">
         <Card.Title>{product.name}</Card.Title>
-        <Card.Text>₹{product.price}</Card.Text>
-        <Button href={`/products/${product.id}`} variant="primary">View Details</Button>
+        <Card.Text> {product.description.split(' ').slice(0, 3).join(' ')}... <br />₹{product.price} </Card.Text>
+        <Card.Text></Card.Text>
       </Card.Body>
     </Card>
   );

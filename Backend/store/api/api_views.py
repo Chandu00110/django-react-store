@@ -1,4 +1,5 @@
 from rest_framework import viewsets,permissions,status,generics
+from rest_framework.views import APIView
 from rest_framework.decorators import action,api_view,permission_classes
 from rest_framework.response import Response
 from .serializers import *
@@ -6,6 +7,11 @@ from ..models import *
 from django.contrib.auth.models import User
 import razorpay
 from django.conf import settings
+
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
+from django.contrib.auth.tokens import default_token_generator
+from ..utils import send_order_confirmation_email
 
 class registerView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -145,6 +151,7 @@ def storePayment(request):
         order_id = request.data.get('order_id','')
         signature = request.data.get('signature','')
         amount = request.data.get('amount','')
+        address = request.data.get('address',None)
 
         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
         params_dict = {
@@ -163,7 +170,7 @@ def storePayment(request):
                 is_paid = True
             )
 
-            order = place_order(request)
+            order = place_order(request,int(address))
 
             newPayment.order = order
             newPayment.save()
@@ -174,14 +181,16 @@ def storePayment(request):
         print("eror:",e)
         return Response({"Error" : str(e)},status = 400)
     
-def place_order(request):
+def place_order(request,address):
     cart_items = CartItems.objects.filter(user=request.user)
     total_price = sum(item.product.price * item.quantity for item in cart_items)
 
+    shipped_address = ShippingAddress.objects.get(user=request.user, id = address)
     order = Order.objects.create(
         user=request.user,
         total_amount=total_price,
-        status = "Processing"
+        status = "Processing",
+        shipped_address = shipped_address
     )
 
     for item in cart_items:
@@ -193,5 +202,20 @@ def place_order(request):
         )
 
     cart_items.delete()
-
+    send_order_confirmation_email(request.user, order)
     return order
+  
+
+class  verifyEmailView(APIView):
+    def get(self,request,uidb64,token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response({"error": "Invalid link"}, status=status.HTTP_400_BAD_REQUEST)
+        if default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            return Response({"message": "Email verified successfully! You can now log in."}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Invalid or expired token"}, status=status.HTTP_400_BAD_REQUEST)
