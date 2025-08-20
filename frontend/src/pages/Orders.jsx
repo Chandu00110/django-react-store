@@ -1,5 +1,6 @@
 import React,{useEffect,useState} from 'react';
 import api from '../api/axios';
+import fetchAPI from '../api/fetchAPI';
 import { Container,Card,Row,Col } from 'react-bootstrap';
 import { MdAccessTime } from "react-icons/md";
 import '../styles/Order.css'
@@ -8,12 +9,16 @@ const Orders = () => {
     const [orders, setOrders] = useState([]);
 
     const fetchOrders = async () => {
-        try{
-            const res = await api.get('order/');
+        try {
+            const res = await fetchAPI(`order/`);
+            
+            if (res.status === 200) {
             setOrders(res.data.results);
-        }
-        catch(error){
-            console.error("Error fetching orders",error.message)
+            } else {
+            console.error("Error fetching categories:", res.status, res.statusText);
+            }
+        } catch (err) {
+            console.error("Network or server error while fetching categories:", err);
         }
     };
 

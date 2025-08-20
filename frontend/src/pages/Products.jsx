@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../api/axios";
+import fetchAPI from "../api/fetchAPI";
 import ProductCard from "../components/ProductCard";
 
 const Products = () => {
@@ -7,16 +7,24 @@ const Products = () => {
     const [products,setProducts] = useState([]);
     const [loading,setLoading] = useState(true);
 
-    useEffect(() => {
-        api.get("product/")
-        .then((res) => {
+    const fetchProducts = async () => {
+        try {
+            const res = await fetchAPI(`product/`);
+            
+            if (res.status === 200) {
             setProducts(res.data.results);
+            } else {
+            console.error("Error fetching categories:", res.status, res.statusText);
+            }
+        } catch (err) {
+            console.error("Network or server error while fetching categories:", err);
+        } finally {
             setLoading(false);
-        })
-        .catch((err) => {
-            console.log("Error fetching the products:",err);
-            setLoading(false);
-        });
+        }
+    };
+
+    useEffect(() => {
+        fetchProducts();
     },[]);
 
     if (loading){

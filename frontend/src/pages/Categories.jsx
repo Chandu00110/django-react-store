@@ -1,22 +1,31 @@
 import React,{useState,useEffect} from 'react';
-import api from '../api/axios';
+import fetchAPI from '../api/fetchAPI';
 import Form from 'react-bootstrap/Form';
 
 const Categories = () => {
 
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const fetchCategories = async () => {
+        try {
+            const res = await fetchAPI(`category/`);
+            
+            if (res.status === 200) {
+            setCategories(res.data.results);
+            } else {
+            console.error("Error fetching categories:", res.status, res.statusText);
+            }
+        } catch (err) {
+            console.error("Network or server error while fetching categories:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     
     useEffect(() => {
-        api.get("category/")
-        .then((res) => {
-            setCategories(res.data.results);
-            setLoading(false);
-        })
-        .catch((err) => {
-            console.log("Errror fetching the products: ", err);
-            setLoading(false);
-        });
+        fetchCategories();
     }, []);
 
     if (loading) {

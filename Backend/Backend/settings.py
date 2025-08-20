@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -171,3 +172,8 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'chandhupepakayala@gmail.com'         #  Replace with your Gmail
 EMAIL_HOST_PASSWORD = 'zigy xmby wclk gjid'      #  Use App Password if 2FA is enabled
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),  # or more
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}

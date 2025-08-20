@@ -8,7 +8,6 @@ import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
-import Checkout from './pages/Checkout';
 
 function App() {
   
@@ -21,7 +20,6 @@ function App() {
           <Route path='/products/:id' element={<ProductDetails />} />
           <Route path='/login' element={<Login />} />
           <Route path='/cart' element={<Cart />} />
-          <Route path='/checkout' element={<Checkout />} />
           <Route path='/orders' element={<Orders />} />
           <Route path='/register' element={<Register />} />
           <Route path="/verify/:uid/:token" element={<VerifyEmail />} />

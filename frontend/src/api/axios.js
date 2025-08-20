@@ -34,7 +34,7 @@ api.interceptors.response.use(
             } catch(error){
                 console.error("Refresh token expired, logging out");
                 localStorage.clear();
-                // window.location.href = '/login';
+                window.location.href = '/login';
             }
         }
         return Promise.reject(error);

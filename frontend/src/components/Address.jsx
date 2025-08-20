@@ -1,26 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Container,
-  Form,
-  Button,
-  Alert,
-  Card,
-  Modal
-} from "react-bootstrap";
+import { Container, Form, Button, Alert, Card, Modal } from "react-bootstrap";
 import api from '../api/axios';
+import fetchAPI from '../api/fetchAPI';
+import { postAPI } from '../api/fetchAPI';
 
-const Address = () => {
+const Address = ({selectedAddress,setSelectedAddress}) => {
   const [addresses, setAddresses] = useState([]);
   const [storeAddress, setStoreAddress] = useState({
-    address_line_1: "",
-    address_line_2: "",
-    city: "",
-    state: "",
-    postal_code: "",
-    country: "",
-    phone_number: "",
-  });
-  const [selectedAddress, setSelectedAddress] = useState();
+                                                      adderss_line_1: "",
+                                                      address_line_2: "",
+                                                      city: "",
+                                                      state: "",
+                                                      postal_code: "",
+                                                      country: "",
+                                                      phone_number: "",
+                                                    });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
@@ -28,18 +22,24 @@ const Address = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
-    const fetchAddresses = async () => {
-      try {
-        const response = await api.get('shippingAddress/');
-        const fetchedAddresses = response.data.results;
-        setAddresses(fetchedAddresses);
-        const defaultAddr = fetchedAddresses.find(addr => addr.is_default);
-        if (defaultAddr) setSelectedAddress(defaultAddr.id);
-      } catch (error) {
-        setError("Failed to load addresses. Please log in.");
-      }
+  const fetchAddresses = async () => {
+        try {
+            const res = await fetchAPI(`shippingAddress/`);
+            
+            if (res.status === 200) {
+              const fetchedAddresses = res.data.results;
+              setAddresses(fetchedAddresses);
+              const defaultAddr = fetchedAddresses.find(addr => addr.is_default);
+              if (defaultAddr) setSelectedAddress(defaultAddr.id);
+            } else {
+            console.error("Error fetching categories:", res.status, res.statusText);
+            }
+        } catch (err) {
+            console.error("Network or server error while fetching categories:", err);
+        }
     };
+
+  useEffect(() => {
     fetchAddresses();
   }, []);
 
@@ -51,7 +51,7 @@ const Address = () => {
   };
 
   const postAddress = async () => {
-    const res = await api.post("shippingAddress/", storeAddress);
+    const res = await postAPI("shippingAddress/", storeAddress);
     if (res.status === 201) {
       setMessage("Address added successfully!");
       setShow(false);
@@ -77,7 +77,7 @@ const Address = () => {
         />
         <div>
           <Card.Text className="text-muted">
-            {addr.address_line_1}, {addr.address_line_2}, {addr.city}, {addr.state}, {addr.postal_code}, {addr.country}
+            {addr.adderss_line_1}, {addr.city}, {addr.state}, {addr.postal_code}, {addr.country}
           </Card.Text>
           <Card.Text className="text-muted">
             {addr.phone_number}
@@ -125,7 +125,7 @@ const Address = () => {
         <Modal.Body>
           <Form>
             {[
-              { label: "Address Line 1", name: "address_line_1", placeholder: "Enter address line 1" },
+              { label: "Address Line 1", name: "adderss_line_1", placeholder: "Enter address line 1" },
               { label: "Address Line 2", name: "address_line_2", placeholder: "Enter address line 2" },
               { label: "City", name: "city", placeholder: "Enter city" },
               { label: "State", name: "state", placeholder: "Enter state" },
