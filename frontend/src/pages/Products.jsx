@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import fetchAPI from "../api/fetchAPI";
 import ProductCard from "../components/ProductCard";
 
-const Products = () => {
-
-    const [products,setProducts] = useState([]);
+const Products = ({products,setProducts}) => {
+  
     const [loading,setLoading] = useState(true);
 
     const fetchProducts = async () => {

@@ -3,10 +3,13 @@ import { Container, Nav, Navbar, Form, InputGroup, FormControl,Button,ListGroup 
 import { CgProfile } from "react-icons/cg";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { CiSearch } from "react-icons/ci";
-import '../styles/Header.css'
+import '../styles/Header.css';
+import fetchAPI from '../api/fetchAPI';
+import api from '../api/axios';
 
-const Header = () => {
+const Header = ({products,setProducts}) => {
     const [isLoggedIn,setIsLoggedIn] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const checkLogin = () => {
         const token = localStorage.getItem('access');
@@ -18,6 +21,26 @@ const Header = () => {
         localStorage.removeItem('refresh');
         setIsLoggedIn(false);
     }
+
+    const fetchSearchResults = async (e) => {
+
+        if (searchTerm.trim() !== '') {
+            const res = await api.get(`product/`,{
+                params : {
+                    search : searchTerm
+                }
+            });
+            setProducts(res.data.results);
+        }
+    };
+
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    useEffect(() => {
+        fetchSearchResults();
+    },[searchTerm]);
 
     useEffect(() => {
         checkLogin();
@@ -35,7 +58,7 @@ const Header = () => {
 
                 <Form className="d-flex search-form me-3">
                     <InputGroup>
-                        <FormControl type='text' placeholder='search' className='search-input' />
+                        <FormControl type='text' placeholder='search' className='search-input' value={searchTerm} onChange={(e) => handleSearch(e)} />
                         <InputGroup.Text className='search-icon'> <CiSearch size={20} /> </InputGroup.Text>
                     </InputGroup>
                 </Form>

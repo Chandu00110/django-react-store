@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +77,12 @@ REST_FRAMEWORK = {
     # Default permission - read only for unauthenticated users
     'DEFAULT_PERMISSION_CLASSES' :(
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ),
+
+    'DEFAULT_FILTER_BACKENDS' : (
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
     ),
     
     # Optional : default pagination

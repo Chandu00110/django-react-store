@@ -1,10 +1,12 @@
 import React,{useState,useEffect} from 'react';
+import api from '../api/axios';
 import fetchAPI from '../api/fetchAPI';
 import Form from 'react-bootstrap/Form';
 
-const Categories = () => {
+const Categories = ({products,setProducts}) => {
 
     const [categories, setCategories] = useState([]);
+    const [selectedCategory,setSelectedCategory] = useState();
     const [loading, setLoading] = useState(true);
 
     const fetchCategories = async () => {
@@ -23,6 +25,25 @@ const Categories = () => {
         }
     };
 
+    const fetchSearchResults = async (e) => {
+
+        if (selectedCategory !== 'all') {
+            const res = await api.get(`product/`,{
+                params : {
+                    search : selectedCategory
+                }
+            });
+            setProducts(res.data.results);
+        }else{
+            const res = await api.get(`product/`);
+            setProducts(res.data.results);
+        }
+    };
+
+    useEffect(() => {
+        fetchSearchResults();
+    },[selectedCategory])
+
     
     useEffect(() => {
         fetchCategories();
@@ -37,17 +58,27 @@ const Categories = () => {
         <>
             <h2>Categories</h2>
             <div>
-            {categories.map((cat) => (
                 <>
                     <Form>
-                        <Form.Check // prettier-ignore
-                                type='checkbox'
-                                id={cat.id}
-                                label={cat.name}
-                            />
+                        <Form.Check 
+                            type='radio'
+                            name='category'
+                            value='all'
+                            label='All'
+                            onChange={(e) => setSelectedCategory("all")}
+                        />
+                        {categories.map((cat) => (
+                            <Form.Check // prettier-ignore
+                                    type='radio'
+                                    name="category"
+                                    id={cat.id}
+                                    value={cat.name}
+                                    label={cat.name}
+                                    onChange={(e) => setSelectedCategory(cat.name)}
+                                />
+                            ))}
                     </Form>
                 </>
-            ))}
             </div>
         </>
         )}

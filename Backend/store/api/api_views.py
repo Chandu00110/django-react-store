@@ -2,6 +2,8 @@ from rest_framework import viewsets,permissions,status,generics
 from rest_framework.views import APIView
 from rest_framework.decorators import action,api_view,permission_classes
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 from .serializers import *
 from ..models import *
 from django.contrib.auth.models import User
@@ -26,10 +28,18 @@ class categoryViewSet(viewsets.ModelViewSet):
 class productViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = productSerializer
+    
 
     # read operations are public, write operations require authentication (global default)
-    # you can refine per-action if you want mre control
+    # you can refine per-action if you want mre control  
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['name','description','category__name']
+    filterset_fields = ['category','price']
+    ordering_fields = ['price','added_on']
+    ordering = ['-added_on']
+    
 
 class productImagesViewSet(viewsets.ModelViewSet):
     queryset = ProductImages.objects.all()
