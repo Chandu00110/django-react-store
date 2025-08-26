@@ -30,7 +30,7 @@ const Categories = ({products,setProducts}) => {
         if (selectedCategory !== 'all') {
             const res = await api.get(`product/`,{
                 params : {
-                    search : selectedCategory
+                    category_search : selectedCategory
                 }
             });
             setProducts(res.data.results);

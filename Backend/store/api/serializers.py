@@ -48,6 +48,11 @@ class productImagesSerializer(serializers.ModelSerializer):
         model = ProductImages
         fields = '__all__'
 
+class productAttributeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductAttribute
+        fields = '__all__'
+
 class productSerializer(serializers.ModelSerializer):
     category = categorySerializer(read_only = True)
     category_id = serializers.PrimaryKeyRelatedField(
@@ -57,10 +62,11 @@ class productSerializer(serializers.ModelSerializer):
     )
 
     product_image = productImagesSerializer(many = True,read_only = True)
+    product_attribute = productAttributeSerializer(many = True,read_only = True)
     
     class Meta:
         model = Product
-        fields = ['id','name','slug','description','price','added_on','category','category_id','product_image']
+        fields = ['id','name','slug','description','price','added_on','category','category_id','product_image','product_attribute','is_available']
 
 class cartItemsSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source = 'product.name',read_only = True)

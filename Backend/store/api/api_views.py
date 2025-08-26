@@ -25,21 +25,44 @@ class categoryViewSet(viewsets.ModelViewSet):
     serializer_class = categorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]    # only amdin can create/update/delete
 
+    def get_queryset(self):
+        return self.queryset.filter(parent = None)
+
 class productViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = productSerializer
     
-
     # read operations are public, write operations require authentication (global default)
     # you can refine per-action if you want mre control  
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    search_fields = ['name','description','category__name']
+    search_fields = ['name','description']
     filterset_fields = ['category','price']
     ordering_fields = ['price','added_on']
     ordering = ['-added_on']
+
+    def get_queryset(self):
+        queryset = self.queryset.filter(is_available = True)
+        search_query = self.request.query_params.get('category_search',None)
+        if search_query:
+            matching_categories = Category.objects.filter(name__icontains=search_query)
+            all_category_ids = set()
+            for category in matching_categories:
+                all_category_ids.add(category.id)
+                all_category_ids.update(self.get_descendant_category_ids(category))
+            
+            queryset = queryset.filter(category_id__in = all_category_ids)
+        return queryset
     
+    def get_descendant_category_ids(self,category):
+        descendants = []
+        children = category.subcategories.all()
+        for child in children:
+            descendants.append(child.id)
+            descendants.extend(self.get_descendant_category_ids(child))
+        
+        return descendants
 
 class productImagesViewSet(viewsets.ModelViewSet):
     queryset = ProductImages.objects.all()

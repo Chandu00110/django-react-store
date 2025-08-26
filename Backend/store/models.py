@@ -3,14 +3,27 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Category(models.Model):
-    name = models.CharField(max_length=100,unique=True)
+    name = models.CharField(max_length=100)
     slug = models.CharField(max_length=100,unique=True)
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='subcategories'
+    )
 
     class Meta:
         verbose_name_plural = 'Categories'
     
+    
     def __str__(self):
-        return self.name
+        full_path = [self.name]
+        k = self.parent
+        while k is not None:
+            full_path.append(k.name)
+            k = k.parent
+        return " -> ".join(full_path[::-1])
     
 class Product(models.Model):
     category = models.ForeignKey(Category,on_delete=models.CASCADE,related_name="p_category")
@@ -32,6 +45,14 @@ class ProductImages(models.Model):
 
     def __str__(self):
         return f"{self.product.name}"
+    
+class ProductAttribute(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name='product_attribute')
+    attribute_name = models.CharField(max_length=100)
+    attribute_value = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.product.name} * {self.attribute_name} : {self.attribute_value}"
     
 class CartItems(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)

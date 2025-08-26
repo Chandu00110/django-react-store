@@ -44,11 +44,19 @@ return (
             </Col>
             <Col>
                 <h1>{product.name}</h1>
-                <p>{product.description}</p>
+                <div className='d-flex justify-content-between align-items-center'>
+                    <p className='m-0'>{product.description}</p>
+                    <Button className='rating-button'>4.8 <IoIosStar  className="star-icon" /> | 5</Button>
+                </div>
                 <hr />
-                <Button className='rating-button'>4.8 <IoIosStar  className="star-icon" /> | 5</Button>
+                {product.product_attribute && product.product_attribute.map((attr) => (
+                    <p>
+                        <strong>{attr.attribute_name}:</strong> {attr.attribute_value}
+                    </p>
+                    // <Badge bg="info" className='me-2 mb-2'>{attr.attribute_name}: {attr.attribute_value}</Badge>
+                ))}
                 <h4>₹{product.price}</h4>
-                <Button onClick={handleAddToCart}>Add to Cart</Button>
+                <Button className='mt-2' onClick={handleAddToCart}>Add to Cart</Button>
             </Col>
         </Row>
     </Container>

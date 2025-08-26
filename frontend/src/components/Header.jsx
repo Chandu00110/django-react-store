@@ -24,7 +24,7 @@ const Header = ({products,setProducts}) => {
 
     const fetchSearchResults = async (e) => {
 
-        if (searchTerm.trim() !== '') {
+        if (searchTerm.trim() !== '' && searchTerm.length > 2) {
             const res = await api.get(`product/`,{
                 params : {
                     search : searchTerm
@@ -56,7 +56,7 @@ const Header = ({products,setProducts}) => {
             <Navbar.Collapse id='basic-navbar-nav'>
                 <Nav className='me-auto'></Nav>
 
-                <Form className="d-flex search-form me-3">
+                <Form className="d-flex search-form me-3" onSubmit={(e) => e.preventDefault()}>
                     <InputGroup>
                         <FormControl type='text' placeholder='search' className='search-input' value={searchTerm} onChange={(e) => handleSearch(e)} />
                         <InputGroup.Text className='search-icon'> <CiSearch size={20} /> </InputGroup.Text>
