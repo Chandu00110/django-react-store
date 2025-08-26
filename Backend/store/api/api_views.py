@@ -238,7 +238,6 @@ def place_order(request,address):
     send_order_confirmation_email(request.user, order)
     return order
   
-
 class  verifyEmailView(APIView):
     def get(self,request,uidb64,token):
         try:

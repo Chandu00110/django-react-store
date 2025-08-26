@@ -17,6 +17,7 @@ def send_verification_email(request,user):
     send_mail(subject,message,email_from,[user.email])
 
 def send_order_confirmation_email(user, order):
+    print("Entered email function")
     subject = 'Your Order Has Been Placed Successfully!'
     message = f"""
             Hi {user.username},
