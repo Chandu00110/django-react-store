@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import api from '../api/axios';
+import { postAPI } from '../api/fetchAPI';
 
 const Login = () => {
 
@@ -10,7 +11,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-        const res = await api.post("token/", {
+        const res = await postAPI("token/", {
             username: username,
             password: password,
         });

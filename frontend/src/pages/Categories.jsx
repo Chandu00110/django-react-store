@@ -1,22 +1,52 @@
 import React,{useState,useEffect} from 'react';
 import api from '../api/axios';
+import fetchAPI from '../api/fetchAPI';
 import Form from 'react-bootstrap/Form';
 
-const Categories = () => {
+const Categories = ({products,setProducts}) => {
 
     const [categories, setCategories] = useState([]);
+    const [selectedCategory,setSelectedCategory] = useState();
     const [loading, setLoading] = useState(true);
+
+    const fetchCategories = async () => {
+        try {
+            const res = await fetchAPI(`category/`);
+            
+            if (res.status === 200) {
+            setCategories(res.data.results);
+            } else {
+            console.error("Error fetching categories:", res.status, res.statusText);
+            }
+        } catch (err) {
+            console.error("Network or server error while fetching categories:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchSearchResults = async (e) => {
+
+        if (selectedCategory !== 'all') {
+            const res = await api.get(`product/`,{
+                params : {
+                    category_search : selectedCategory
+                }
+            });
+            setProducts(res.data.results);
+        }else{
+            const res = await api.get(`product/`);
+            setProducts(res.data.results);
+        }
+    };
+
+    useEffect(() => {
+        fetchSearchResults();
+    },[selectedCategory])
+
     
     useEffect(() => {
-        api.get("category/")
-        .then((res) => {
-            setCategories(res.data.results);
-            setLoading(false);
-        })
-        .catch((err) => {
-            console.log("Errror fetching the products: ", err);
-            setLoading(false);
-        });
+        fetchCategories();
     }, []);
 
     if (loading) {
@@ -28,17 +58,27 @@ const Categories = () => {
         <>
             <h2>Categories</h2>
             <div>
-            {categories.map((cat) => (
                 <>
                     <Form>
-                        <Form.Check // prettier-ignore
-                                type='checkbox'
-                                id={cat.id}
-                                label={cat.name}
-                            />
+                        <Form.Check 
+                            type='radio'
+                            name='category'
+                            value='all'
+                            label='All'
+                            onChange={(e) => setSelectedCategory("all")}
+                        />
+                        {categories.map((cat) => (
+                            <Form.Check // prettier-ignore
+                                    type='radio'
+                                    name="category"
+                                    id={cat.id}
+                                    value={cat.name}
+                                    label={cat.name}
+                                    onChange={(e) => setSelectedCategory(cat.name)}
+                                />
+                            ))}
                     </Form>
                 </>
-            ))}
             </div>
         </>
         )}

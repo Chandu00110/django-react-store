@@ -1,10 +1,35 @@
+.product-card{
+    width: 220px;
+    height:345px;
+    cursor: pointer;
+}
+
+.product-card-body{
+    padding: 0px 20px;
+}
+
 .card-img{
     text-align: center;
 }
 
 .card-img img{
     margin: 10px;
-    height: 250px;
-    width: 270px;
+    height: 240px;
+    width: 190px;
     border-radius: 0px;
+}
+
+.product-badge{
+    background-color: white !important;
+    color: black;
+    position: absolute;
+    top: 65%;
+    left: 17px;
+    z-index: 3;
+    border-radius: 0;
+}
+
+.star-icon{
+    font-size: 15px;
+    color: rgb(49, 180, 23);
 }

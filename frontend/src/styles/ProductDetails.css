@@ -5,6 +5,14 @@
 }
 
 .product-images img{
-    height: 300px;
-    width: 250px;
+    height: 529px;
+    width: 395px;
+}
+
+.rating-button{
+    background-color: white;
+    color: black;
+    width: 100px;
+    border: 1px solid #31b417;
+    margin-bottom: 5px;
 }
