@@ -1,8 +1,9 @@
 import React,{useEffect,useState} from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../api/axios';
-import { Container,Row,Col,Button,Image } from 'react-bootstrap';
-import '../styles/ProductDetails.css'
+import { Container,Row,Col,Button,Image,Badge } from 'react-bootstrap';
+import { IoIosStar  } from "react-icons/io";
+import '../styles/ProductDetails.css';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -32,20 +33,30 @@ const ProductDetails = () => {
 return (
     <Container className='mt-4'>
         <Row>
-            <Col sm={6}>
+            <Col sm={8}>
             {product.product_image && (
                 <div className="product-images">
                     {product.product_image.map((image) =>(
-                        <Image src={image.image} rounded/>
+                        <Image src={image.image}/>
                     ))}
                 </div>
             )}
             </Col>
             <Col>
                 <h1>{product.name}</h1>
+                <div className='d-flex justify-content-between align-items-center'>
+                    <p className='m-0'>{product.description}</p>
+                    <Button className='rating-button'>4.8 <IoIosStar  className="star-icon" /> | 5</Button>
+                </div>
+                <hr />
+                {product.product_attribute && product.product_attribute.map((attr) => (
+                    <p>
+                        <strong>{attr.attribute_name}:</strong> {attr.attribute_value}
+                    </p>
+                    // <Badge bg="info" className='me-2 mb-2'>{attr.attribute_name}: {attr.attribute_value}</Badge>
+                ))}
                 <h4>₹{product.price}</h4>
-                <p>Description: <br/>{product.description}</p>
-                <Button onClick={handleAddToCart}>Add to Cart</Button>
+                <Button className='mt-2' onClick={handleAddToCart}>Add to Cart</Button>
             </Col>
         </Row>
     </Container>

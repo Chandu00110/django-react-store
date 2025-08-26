@@ -1,11 +1,19 @@
 from rest_framework import viewsets,permissions,status,generics
+from rest_framework.views import APIView
 from rest_framework.decorators import action,api_view,permission_classes
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 from .serializers import *
 from ..models import *
 from django.contrib.auth.models import User
 import razorpay
 from django.conf import settings
+
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
+from django.contrib.auth.tokens import default_token_generator
+from ..utils import send_order_confirmation_email
 
 class registerView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -17,13 +25,44 @@ class categoryViewSet(viewsets.ModelViewSet):
     serializer_class = categorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]    # only amdin can create/update/delete
 
+    def get_queryset(self):
+        return self.queryset.filter(parent = None)
+
 class productViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = productSerializer
-
+    
     # read operations are public, write operations require authentication (global default)
-    # you can refine per-action if you want mre control
+    # you can refine per-action if you want mre control  
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['name','description']
+    filterset_fields = ['category','price']
+    ordering_fields = ['price','added_on']
+    ordering = ['-added_on']
+
+    def get_queryset(self):
+        queryset = self.queryset.filter(is_available = True)
+        search_query = self.request.query_params.get('category_search',None)
+        if search_query:
+            matching_categories = Category.objects.filter(name__icontains=search_query)
+            all_category_ids = set()
+            for category in matching_categories:
+                all_category_ids.add(category.id)
+                all_category_ids.update(self.get_descendant_category_ids(category))
+            
+            queryset = queryset.filter(category_id__in = all_category_ids)
+        return queryset
+    
+    def get_descendant_category_ids(self,category):
+        descendants = []
+        children = category.subcategories.all()
+        for child in children:
+            descendants.append(child.id)
+            descendants.extend(self.get_descendant_category_ids(child))
+        
+        return descendants
 
 class productImagesViewSet(viewsets.ModelViewSet):
     queryset = ProductImages.objects.all()
@@ -145,6 +184,7 @@ def storePayment(request):
         order_id = request.data.get('order_id','')
         signature = request.data.get('signature','')
         amount = request.data.get('amount','')
+        address = request.data.get('address',None)
 
         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
         params_dict = {
@@ -163,7 +203,7 @@ def storePayment(request):
                 is_paid = True
             )
 
-            order = place_order(request)
+            order = place_order(request,int(address))
 
             newPayment.order = order
             newPayment.save()
@@ -174,14 +214,16 @@ def storePayment(request):
         print("eror:",e)
         return Response({"Error" : str(e)},status = 400)
     
-def place_order(request):
+def place_order(request,address):
     cart_items = CartItems.objects.filter(user=request.user)
     total_price = sum(item.product.price * item.quantity for item in cart_items)
 
+    shipped_address = ShippingAddress.objects.get(user=request.user, id = address)
     order = Order.objects.create(
         user=request.user,
         total_amount=total_price,
-        status = "Processing"
+        status = "Processing",
+        shipped_address = shipped_address
     )
 
     for item in cart_items:
@@ -193,5 +235,20 @@ def place_order(request):
         )
 
     cart_items.delete()
-
+    send_order_confirmation_email(request.user, order)
     return order
+  
+
+class  verifyEmailView(APIView):
+    def get(self,request,uidb64,token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response({"error": "Invalid link"}, status=status.HTTP_400_BAD_REQUEST)
+        if default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            return Response({"message": "Email verified successfully! You can now log in."}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Invalid or expired token"}, status=status.HTTP_400_BAD_REQUEST)

@@ -6,6 +6,7 @@ from .models import *
 admin.site.register(Category)
 admin.site.register(Product)
 admin.site.register(ProductImages)
+admin.site.register(ProductAttribute)
 admin.site.register(CartItems)
 admin.site.register(ShippingAddress)
 admin.site.register(Order)

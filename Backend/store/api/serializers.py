@@ -3,6 +3,7 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from ..models import *
 from django.contrib.auth.models import User
+from ..utils import send_verification_email
 
 class RegisterSerializer(serializers.ModelSerializer):
 
@@ -28,7 +29,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         validated_data['username'] = validated_data['email']
         validated_data.pop('password2')
 
-        user = User.objects.create_user(**validated_data)
+        user = User.objects.create_user(is_active=False,**validated_data)
+
+        send_verification_email(request=self.context.get('request'), user=user)
         return user
     
     class Meta:
@@ -45,6 +48,11 @@ class productImagesSerializer(serializers.ModelSerializer):
         model = ProductImages
         fields = '__all__'
 
+class productAttributeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductAttribute
+        fields = '__all__'
+
 class productSerializer(serializers.ModelSerializer):
     category = categorySerializer(read_only = True)
     category_id = serializers.PrimaryKeyRelatedField(
@@ -54,10 +62,11 @@ class productSerializer(serializers.ModelSerializer):
     )
 
     product_image = productImagesSerializer(many = True,read_only = True)
+    product_attribute = productAttributeSerializer(many = True,read_only = True)
     
     class Meta:
         model = Product
-        fields = ['id','name','slug','description','price','added_on','category','category_id','product_image']
+        fields = ['id','name','slug','description','price','added_on','category','category_id','product_image','product_attribute','is_available']
 
 class cartItemsSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source = 'product.name',read_only = True)
@@ -112,4 +121,4 @@ class orderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id','ordered_on','shipped_address','shipped_address_id','status','order_items']
+        fields = ['id','ordered_on','shipped_address','shipped_address_id','status','order_items','total_amount']
