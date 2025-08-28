@@ -139,4 +139,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## 📬 Contact
 
-For questions or feedback, please open an issue [chandhupepakayala@gmail.com](mailto:chandhupepakayala@gmail.com)
+For questions or feedback, please open an issue [chandrashekharpepakayala@gmail.com](mailto:chandrashekharpepakayala@gmail.com)

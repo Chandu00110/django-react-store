@@ -161,4 +161,4 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 ## 📬 Contact
 
-For questions or feedback, please open an issue [chandhupepakayala@gmail.com](mailto:chandhupepakayala@gmail.com)
+For questions or feedback, please open an issue [chandrashekharpepakayala@gmail.com](mailto:chandrashekharpepakayala@gmail.com)
