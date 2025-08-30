@@ -2,6 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
     baseURL:'http://127.0.0.1:8000/',       // Django API base URL
+    // baseURL:'https://django-react-store-32k3.onrender.com/',       // Django API base URL
     header : {
         "Content-Type" : "application/json",
     },

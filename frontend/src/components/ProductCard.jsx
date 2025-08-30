@@ -9,13 +9,13 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <Card className="product-card" onClick={redirectToProductDetails}>
+    <Card className="product-card m-2" onClick={redirectToProductDetails}>
       {product.product_image && (
         <div className="card-img">
             <Carousel fade indicators={false} controls={false}>
                 {product.product_image.map((image) =>(
                     <Carousel.Item>
-                        <Card.Img variant="top" className="" src={image.image} alt={product.name} />
+                        <Card.Img variant="top" className="" src={image.image_url} alt={product.name} />
                     </Carousel.Item>
                 ))}
             </Carousel>
@@ -23,7 +23,7 @@ const ProductCard = ({ product }) => {
         </div>
       )}
       <Card.Body className="product-card-body">
-        <Card.Title>{product.name}</Card.Title>
+        <Card.Title>{product.name.split(' ').slice(0, 2).join(' ')}</Card.Title>
         <Card.Text> {product.description.split(' ').slice(0, 3).join(' ')}... <br />₹{product.price} </Card.Text>
         <Card.Text></Card.Text>
       </Card.Body>

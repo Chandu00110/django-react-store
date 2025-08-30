@@ -37,7 +37,7 @@ return (
             {product.product_image && (
                 <div className="product-images">
                     {product.product_image.map((image) =>(
-                        <Image src={image.image}/>
+                        <Image src={image.image_url}/>
                     ))}
                 </div>
             )}
