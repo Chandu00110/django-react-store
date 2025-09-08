@@ -52,7 +52,7 @@ const Orders = () => {
                     <div className='items d-flex'>
                       {order.order_items.map((item, index) => (
                           <div className='ms-4 me-4'>
-                            <Card.Img variant="top" src={item.product_images[0].image} style={{height:"100px",width : "100px"}} />
+                            <Card.Img variant="top" src={item.product_images[0].image_url} style={{height:"100px",width : "70px"}} />
                             <p>{item.product_name}</p>
                           </div>
                       ))}

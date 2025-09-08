@@ -15,8 +15,10 @@
 .card-img img{
     margin: 0px;
     height: 240px;
-    width: 190px;
+    /* width: 190px; */
+    width: 100%;
     border-radius: 0px;
+    object-fit: contain;
 }
 
 .product-badge{

@@ -86,7 +86,7 @@ const CartItems = ({loading,setLoading,setIsCartEmpty,setTotalPrice}) => {
                     <Carousel fade controls={false} indicators={false}>
                         {item.product_images.map((image) =>(
                             <Carousel.Item>
-                                <Card.Img variant="top" className="" src={image.image} alt={item.name} />
+                                <Card.Img variant="top" className="" src={image.image_url} alt={item.name} />
                             </Carousel.Item>
                         ))}
                     </Carousel>
