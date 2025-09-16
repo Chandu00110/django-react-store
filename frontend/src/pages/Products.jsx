@@ -11,6 +11,7 @@ const Products = ({products,setProducts}) => {
             const res = await fetchAPI(`product/`);
             
             if (res.status === 200) {
+              console.log("Fetched products:", res.data);
             setProducts(res.data.results);
             } else {
             console.error("Error fetching categories:", res.status, res.statusText);
