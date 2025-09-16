@@ -45,9 +45,10 @@ cd django-react-store
 
 # 2. Create and activate virtual environment
 python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
+source venv/scripts/activate   # On Windows: venv\Scripts\activate
 
 # 3. Install Python dependencies
+cd backend
 pip install -r requirements.txt
 
 # 4. Run migrations
