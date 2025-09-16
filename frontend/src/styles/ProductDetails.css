@@ -6,7 +6,9 @@
 
 .product-images img{
     height: 529px;
-    width: 395px;
+    /* width: 395px; */
+    width: 100%;
+    object-fit: contain;
 }
 
 .rating-button{
